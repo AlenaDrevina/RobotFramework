@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.0.3 (Python 3.10.2 on win32)" generated="20221021 19:34:26.157" rpa="false" schemaversion="2">
+<suite id="s1" name="Test" source="C:\!diskD\test\pythonprojectown\Tests\test.robot">
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary" type="SETUP">
+<arg>pyodbc</arg>
+<arg>${DBHost_ConnectionString}</arg>
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to
+connect to the database using the map string `db_custom_param_string`.</doc>
+<msg timestamp="20221021 19:34:26.238" level="INFO">Executing : Connect To Database Using Custom Params : pyodbc.connect(db_api_2.connect(Driver='SQL Server', Server='EPBYMINW0EE0\SQLEXPRESS03', Database='TRN', Trusted_Connection='yes', UID='testuser', PWD='password12345')) </msg>
+<status status="PASS" starttime="20221021 19:34:26.233" endtime="20221021 19:34:26.373"/>
+</kw>
+<test id="s1-t1" name="Test 1. Jobs: Verify a table exists or not">
+<kw name="Table Must Exist" library="DatabaseLibrary">
+<arg>jobs</arg>
+<doc>Check if the table given exists in the database. Set optional input `sansTran` to True to run command without an
+explicit transaction commit or rollback.</doc>
+<msg timestamp="20221021 19:34:26.375" level="INFO">Executing : Table Must Exist  |  jobs </msg>
+<msg timestamp="20221021 19:34:26.375" level="INFO">Executing : Row Count  |  SELECT * FROM information_schema.tables WHERE table_name='jobs' </msg>
+<status status="PASS" starttime="20221021 19:34:26.375" endtime="20221021 19:34:26.396"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Check the existence of table in this DB
+|
+| *Expected result:*
+| Table 'jobs' exists in DB</doc>
+<tag>AUTO-01</tag>
+<status status="PASS" starttime="20221021 19:34:26.373" endtime="20221021 19:34:26.397"/>
+</test>
+<test id="s1-t2" name="Test 2. Jobs: Find out about the existense of following position - Programmer">
+<kw name="Check If Exists In Database" library="DatabaseLibrary">
+<arg>select job_id from hr.jobs where job_title='Programmer';</arg>
+<doc>Check if any row would be returned by given the input `selectStatement`. If there are no results, then this will
+throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit transaction
+commit or rollback.</doc>
+<msg timestamp="20221021 19:34:26.399" level="INFO">Executing : Check If Exists In Database  |  select job_id from hr.jobs where job_title='Programmer'; </msg>
+<msg timestamp="20221021 19:34:26.400" level="INFO">Executing : Query  |  select job_id from hr.jobs where job_title='Programmer'; </msg>
+<status status="PASS" starttime="20221021 19:34:26.399" endtime="20221021 19:34:26.404"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select job_id from hr.jobs where job_title='Programmer';'
+|
+| *Expected result:*
+| The result will be - job_id=9
+| If there are no results, then this will throw an AssertionError.</doc>
+<tag>AUTO-02</tag>
+<status status="PASS" starttime="20221021 19:34:26.398" endtime="20221021 19:34:26.405"/>
+</test>
+<test id="s1-t3" name="Test 3. Jobs: Find out the position with the highest salary">
+<kw name="Query" library="DatabaseLibrary">
+<var>@{queryResults}</var>
+<arg>select TOP 1 job_title,max(max_salary) as maximum from hr.jobs group by job_title order by maximum desc;</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20221021 19:34:26.409" level="INFO">Executing : Query  |  select TOP 1 job_title,max(max_salary) as maximum from hr.jobs group by job_title order by maximum desc; </msg>
+<msg timestamp="20221021 19:34:26.412" level="INFO">@{queryResults} = [ ('President', Decimal('40000.00')) ]</msg>
+<status status="PASS" starttime="20221021 19:34:26.408" endtime="20221021 19:34:26.412"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>@{queryResults}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 19:34:26.413" endtime="20221021 19:34:26.413"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select TOP 1 job_title,max(max_salary) as maximum from hr.jobs group by job_title order by maximum desc;'
+|
+| *Expected result:*
+| The result will be - (President, 40000)</doc>
+<tag>AUTO-03</tag>
+<status status="PASS" starttime="20221021 19:34:26.406" endtime="20221021 19:34:26.414"/>
+</test>
+<test id="s1-t4" name="Test 4. Jobs: Check the count of rows in table 'jobs' with min_salary=4000,it is equal to 3">
+<kw name="Row Count Is Equal To X" library="DatabaseLibrary">
+<arg>select * from hr.jobs where min_salary='4000';</arg>
+<arg>3</arg>
+<doc>Check if the number of rows returned from `selectStatement` is equal to the value submitted. If not, then this
+will throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit
+transaction commit or rollback.</doc>
+<msg timestamp="20221021 19:34:26.416" level="INFO">Executing : Row Count Is Equal To X  |  select * from hr.jobs where min_salary='4000';  |  3 </msg>
+<msg timestamp="20221021 19:34:26.416" level="INFO">Executing : Row Count  |  select * from hr.jobs where min_salary='4000'; </msg>
+<status status="PASS" starttime="20221021 19:34:26.416" endtime="20221021 19:34:26.418"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select * from hr.jobs where min_salary=4000;'
+|
+| *Expected result:*
+| The quantity with min_salary=4000 will be - 3</doc>
+<tag>AUTO-04</tag>
+<status status="PASS" starttime="20221021 19:34:26.415" endtime="20221021 19:34:26.419"/>
+</test>
+<test id="s1-t5" name="Test 5. Employees: Count of rows in table">
+<kw name="Query" library="DatabaseLibrary">
+<var>${rowCount}</var>
+<arg>select count(*) from hr.employees;</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20221021 19:34:26.421" level="INFO">Executing : Query  |  select count(*) from hr.employees; </msg>
+<msg timestamp="20221021 19:34:26.426" level="INFO">${rowCount} = [(40, )]</msg>
+<status status="PASS" starttime="20221021 19:34:26.421" endtime="20221021 19:34:26.426"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${rowCount}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 19:34:26.427" endtime="20221021 19:34:26.427"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select count(*) from hr.employees;'
+|
+| *Expected result:*
+| The count of rows will be 40</doc>
+<tag>AUTO-05</tag>
+<status status="PASS" starttime="20221021 19:34:26.420" endtime="20221021 19:34:26.428"/>
+</test>
+<test id="s1-t6" name="Test 6. Employees: Content of table">
+<kw name="Query" library="DatabaseLibrary">
+<var>@{QueryResult}</var>
+<arg>select * from hr.employees</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20221021 19:34:26.431" level="INFO">Executing : Query  |  select * from hr.employees </msg>
+<msg timestamp="20221021 19:34:26.434" level="INFO">@{QueryResult} = [ (100, 'Steven', 'King', 'steven.king@sqltutorial.org', '515.123.4567', '1987-06-17', 4, Decimal('24000.00'), None, 9) | (101, 'Neena', 'Kochhar', 'neena.kochhar@sqltutorial.org', '515.123.4568', '19...</msg>
+<status status="PASS" starttime="20221021 19:34:26.431" endtime="20221021 19:34:26.434"/>
+</kw>
+<kw name="Log Many" library="BuiltIn">
+<arg>@{QueryResult}</arg>
+<doc>Logs the given messages as separate entries using the INFO level.</doc>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(100, 'Steven', 'King', 'steven.king@sqltutorial.org', '515.123.4567', '1987-06-17', 4, Decimal('24000.00'), None, 9)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(101, 'Neena', 'Kochhar', 'neena.kochhar@sqltutorial.org', '515.123.4568', '1989-09-21', 5, Decimal('17000.00'), 100, 9)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(102, 'Lex', 'De Haan', 'lex.de haan@sqltutorial.org', '515.123.4569', '1993-01-13', 5, Decimal('17000.00'), 100, 9)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(103, 'Alexander', 'Hunold', 'alexander.hunold@sqltutorial.org', '590.423.4567', '1990-01-03', 9, Decimal('9000.00'), 102, 6)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(104, 'Bruce', 'Ernst', 'bruce.ernst@sqltutorial.org', '590.423.4568', '1991-05-21', 9, Decimal('6000.00'), 103, 6)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(105, 'David', 'Austin', 'david.austin@sqltutorial.org', '590.423.4569', '1997-06-25', 9, Decimal('4800.00'), 103, 6)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(106, 'Valli', 'Pataballa', 'valli.pataballa@sqltutorial.org', '590.423.4560', '1998-02-05', 9, Decimal('4800.00'), 103, 6)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(107, 'Diana', 'Lorentz', 'diana.lorentz@sqltutorial.org', '590.423.5567', '1999-02-07', 9, Decimal('4200.00'), 103, 6)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(108, 'Nancy', 'Greenberg', 'nancy.greenberg@sqltutorial.org', '515.124.4569', '1994-08-17', 7, Decimal('12000.00'), 101, 10)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(109, 'Daniel', 'Faviet', 'daniel.faviet@sqltutorial.org', '515.124.4169', '1994-08-16', 6, Decimal('9000.00'), 108, 10)</msg>
+<msg timestamp="20221021 19:34:26.435" level="INFO">(110, 'John', 'Chen', 'john.chen@sqltutorial.org', '515.124.4269', '1997-09-28', 6, Decimal('8200.00'), 108, 10)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(111, 'Ismael', 'Sciarra', 'ismael.sciarra@sqltutorial.org', '515.124.4369', '1997-09-30', 6, Decimal('7700.00'), 108, 10)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(112, 'Jose Manuel', 'Urman', 'jose manuel.urman@sqltutorial.org', '515.124.4469', '1998-03-07', 6, Decimal('7800.00'), 108, 10)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(113, 'Luis', 'Popp', 'luis.popp@sqltutorial.org', '515.124.4567', '1999-12-07', 6, Decimal('6900.00'), 108, 10)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(114, 'Den', 'Raphaely', 'den.raphaely@sqltutorial.org', '515.127.4561', '1994-12-07', 14, Decimal('11000.00'), 100, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(115, 'Alexander', 'Khoo', 'alexander.khoo@sqltutorial.org', '515.127.4562', '1995-05-18', 13, Decimal('3100.00'), 114, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(116, 'Shelli', 'Baida', 'shelli.baida@sqltutorial.org', '515.127.4563', '1997-12-24', 13, Decimal('2900.00'), 114, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(117, 'Sigal', 'Tobias', 'sigal.tobias@sqltutorial.org', '515.127.4564', '1997-07-24', 13, Decimal('2800.00'), 114, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(118, 'Guy', 'Himuro', 'guy.himuro@sqltutorial.org', '515.127.4565', '1998-11-15', 13, Decimal('2600.00'), 114, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(119, 'Karen', 'Colmenares', 'karen.colmenares@sqltutorial.org', '515.127.4566', '1999-08-10', 13, Decimal('2500.00'), 114, 3)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(120, 'Matthew', 'Weiss', 'matthew.weiss@sqltutorial.org', '650.123.1234', '1996-07-18', 19, Decimal('8000.00'), 100, 5)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(121, 'Adam', 'Fripp', 'adam.fripp@sqltutorial.org', '650.123.2234', '1997-04-10', 19, Decimal('8200.00'), 100, 5)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(122, 'Payam', 'Kaufling', 'payam.kaufling@sqltutorial.org', '650.123.3234', '1995-05-01', 19, Decimal('7900.00'), 100, 5)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(123, 'Shanta', 'Vollman', 'shanta.vollman@sqltutorial.org', '650.123.4234', '1997-10-10', 19, Decimal('6500.00'), 100, 5)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(126, 'Irene', 'Mikkilineni', 'irene.mikkilineni@sqltutorial.org', '650.124.1224', '1998-09-28', 18, Decimal('2700.00'), 120, 5)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(145, 'John', 'Russell', 'john.russell@sqltutorial.org', None, '1996-10-01', 15, Decimal('14000.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(146, 'Karen', 'Partners', 'karen.partners@sqltutorial.org', None, '1997-01-05', 15, Decimal('13500.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(176, 'Jonathon', 'Taylor', 'jonathon.taylor@sqltutorial.org', None, '1998-03-24', 16, Decimal('8600.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.436" level="INFO">(177, 'Jack', 'Livingston', 'jack.livingston@sqltutorial.org', None, '1998-04-23', 16, Decimal('8400.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(178, 'Kimberely', 'Grant', 'kimberely.grant@sqltutorial.org', None, '1999-05-24', 16, Decimal('7000.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(179, 'Charles', 'Johnson', 'charles.johnson@sqltutorial.org', None, '2000-01-04', 16, Decimal('6200.00'), 100, 8)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(192, 'Sarah', 'Bell', 'sarah.bell@sqltutorial.org', '650.501.1876', '1996-02-04', 17, Decimal('4000.00'), 123, 5)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(193, 'Britney', 'Everett', 'britney.everett@sqltutorial.org', '650.501.2876', '1997-03-03', 17, Decimal('3900.00'), 123, 5)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(200, 'Jennifer', 'Whalen', 'jennifer.whalen@sqltutorial.org', '515.123.4444', '1987-09-17', 3, Decimal('4400.00'), 101, 1)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(201, 'Michael', 'Hartstein', 'michael.hartstein@sqltutorial.org', '515.123.5555', '1996-02-17', 10, Decimal('13000.00'), 100, 2)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(202, 'Pat', 'Fay', 'pat.fay@sqltutorial.org', '603.123.6666', '1997-08-17', 11, Decimal('6000.00'), 201, 2)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(203, 'Susan', 'Mavris', 'susan.mavris@sqltutorial.org', '515.123.7777', '1994-06-07', 8, Decimal('6500.00'), 101, 4)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(204, 'Hermann', 'Baer', 'hermann.baer@sqltutorial.org', '515.123.8888', '1994-06-07', 12, Decimal('10000.00'), 101, 7)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(205, 'Shelley', 'Higgins', 'shelley.higgins@sqltutorial.org', '515.123.8080', '1994-06-07', 2, Decimal('12000.00'), 101, 11)</msg>
+<msg timestamp="20221021 19:34:26.437" level="INFO">(206, 'William', 'Gietz', 'william.gietz@sqltutorial.org', '515.123.8181', '1994-06-07', 1, Decimal('8300.00'), 205, 11)</msg>
+<status status="PASS" starttime="20221021 19:34:26.434" endtime="20221021 19:34:26.437"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select * from hr.employees;'
+|
+| *Expected result:*
+| Table with the values in rows</doc>
+<tag>AUTO-06</tag>
+<status status="PASS" starttime="20221021 19:34:26.429" endtime="20221021 19:34:26.438"/>
+</test>
+<test id="s1-t7" name="Test 7. Employees: Average salary for all employees">
+<kw name="Query" library="DatabaseLibrary">
+<var>@{AverageResult}</var>
+<arg>SELECT sum(salary)/count(*) as average_salary FROM hr.employees;</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20221021 19:34:26.441" level="INFO">Executing : Query  |  SELECT sum(salary)/count(*) as average_salary FROM hr.employees; </msg>
+<msg timestamp="20221021 19:34:26.444" level="INFO">@{AverageResult} = [ (Decimal('8060.000000'), ) ]</msg>
+<status status="PASS" starttime="20221021 19:34:26.440" endtime="20221021 19:34:26.444"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>@{AverageResult}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 19:34:26.445" endtime="20221021 19:34:26.445"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'SELECT sum(salary)/count(*) as average_salary FROM hr.employees;'
+|
+| *Expected result:*
+| Average value of salary for all employees should be 8060</doc>
+<tag>AUTO-07</tag>
+<status status="PASS" starttime="20221021 19:34:26.439" endtime="20221021 19:34:26.446"/>
+</test>
+<test id="s1-t8" name="Test 7. Employees: The quantity of Employees whose length of name will be equal to 3">
+<kw name="Row Count Is Less Than X" library="DatabaseLibrary">
+<arg>select count(*) from hr.employees where len(first_name)&lt;4;</arg>
+<arg>4</arg>
+<doc>Check if the number of rows returned from `selectStatement` is less than the value submitted. If not, then this
+will throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit
+transaction commit or rollback.</doc>
+<msg timestamp="20221021 19:34:26.448" level="INFO">Executing : Row Count Is Less Than X  |  select count(*) from hr.employees where len(first_name)&lt;4;  |  4 </msg>
+<msg timestamp="20221021 19:34:26.448" level="INFO">Executing : Row Count  |  select count(*) from hr.employees where len(first_name)&lt;4; </msg>
+<status status="PASS" starttime="20221021 19:34:26.448" endtime="20221021 19:34:26.451"/>
+</kw>
+<doc>|*Test Steps:*
+|1. Connect to DB
+|2. Execute the sql quiery - 'select count(*) from hr.employees where len(first_name)&lt;4;'
+|
+| *Expected result:*
+| The quantity of Employees, whose length of name will be equal to 3, is 4</doc>
+<tag>AUTO-08</tag>
+<status status="PASS" starttime="20221021 19:34:26.447" endtime="20221021 19:34:26.451"/>
+</test>
+<kw name="Disconnect From Database" library="DatabaseLibrary" type="TEARDOWN">
+<doc>Disconnects from the database.</doc>
+<msg timestamp="20221021 19:34:26.454" level="INFO">Executing : Disconnect From Database</msg>
+<status status="PASS" starttime="20221021 19:34:26.454" endtime="20221021 19:34:26.455"/>
+</kw>
+<status status="PASS" starttime="20221021 19:34:26.160" endtime="20221021 19:34:26.455"/>
+</suite>
+<statistics>
+<total>
+<stat pass="8" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">AUTO-01</stat>
+<stat pass="1" fail="0" skip="0">AUTO-02</stat>
+<stat pass="1" fail="0" skip="0">AUTO-03</stat>
+<stat pass="1" fail="0" skip="0">AUTO-04</stat>
+<stat pass="1" fail="0" skip="0">AUTO-05</stat>
+<stat pass="1" fail="0" skip="0">AUTO-06</stat>
+<stat pass="1" fail="0" skip="0">AUTO-07</stat>
+<stat pass="1" fail="0" skip="0">AUTO-08</stat>
+</tag>
+<suite>
+<stat pass="8" fail="0" skip="0" id="s1" name="Test">Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
