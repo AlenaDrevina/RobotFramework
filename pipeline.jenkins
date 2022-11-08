@@ -1,17 +1,31 @@
 pipeline {
-   agent any
-
-   stages {
-
+    agent any
+    stages {
+   
       stage('Build') {
-        steps{      
-          git branch 'Module5CI_CD', url: 'https://github.com/AlenaDrevina/PythonPytest.git'
-		  sh 'python3 t1.py'
+        steps {
+          git branch: 'main', url: 'https://github.com/AlenaDrevina/RobotFramework.git'
         }
       }
-	  stage('Test')  {
-	  steps {
-	    sh 'python3 -m pytest -v -s t1.py'
-
+      stage('Test') {
+        steps {
+          sh 'python3 -m robot Tests/test.robot'
+        }
+      }
+      stage('Deploy') {
+        steps {
+         sh 'git checkout pre-prod'
+         sh 'git merge main'
+         sh 'git add .'
+         sh 'git config --global user.email "alena_drevina@epam.com"'
+         sh 'git config --global user.name "Admin"'
+         sh 'git commit -a'
+      }
+      }
+      stage('Monitor') {
+     steps {
+       echo 'Well done!'
+     }
+   }
+    }    
   }
-}
