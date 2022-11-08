@@ -9,7 +9,8 @@ pipeline {
       }
       stage('Test') {
         steps {
-          sh 'python3 -m robot test.robot'
+          echo 'Testing using Robot Framework'
+          sh 'robot test.robot'
         }
       }
       stage('Deploy') {
