@@ -20,7 +20,7 @@ Follow [instructions](../README.md)
 
 ## Run robot tests
 ```bash
-robot -d Output Tests/test.robot
+robot -d Output test.robot
 ```
 
 # Report portal integration with Robot Framework
