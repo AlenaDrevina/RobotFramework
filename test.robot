@@ -1,31 +1,31 @@
-*** Settings ***
-
-Library  DatabaseLibrary
-
-Suite Setup     Connect To Database   pymssql  ${DBName}    ${DBUser}    ${DBPass}    ${DBHost}    ${DBPort}
-Suite Teardown  Disconnect From Database
-
-
-*** Variables ***
-
-${DBName}  TRN
-${DBUser}  testuser
-${DBPass}  password12345
-${DBHost}  192.168.1.138
-${DBPort}  1433
-
-
-
-
-
 #*** Settings ***
-#Suite Setup  Connect To Database Using Custom Params   pyodbc   ${DBHost_ConnectionString}
-#Suite Teardown  Disconnect From Database
+
 #Library  DatabaseLibrary
-#Library  String
-#Library  OperatingSystem
+
+#Suite Setup     Connect To Database   pymssql  ${DBName}    ${DBUser}    ${DBPass}    ${DBHost}    ${DBPort}
+#Suite Teardown  Disconnect From Database
+
+
 #*** Variables ***
-#${DBHost_ConnectionString}    Driver='SQL Server', Server='EPBYMINW0EE0\\SQLEXPRESS03', Database='TRN', Trusted_Connection='yes', UID='testuser', PWD='password12345'
+
+#${DBName}  TRN
+#${DBUser}  testuser
+#${DBPass}  password12345
+#${DBHost}  192.168.1.138
+#${DBPort}  1433
+
+
+
+
+
+*** Settings ***
+Suite Setup  Connect To Database Using Custom Params   pyodbc   ${DBHost_ConnectionString}
+Suite Teardown  Disconnect From Database
+Library  DatabaseLibrary
+Library  String
+Library  OperatingSystem
+*** Variables ***
+${DBHost_ConnectionString}    Driver='SQL Server', Server='EPBYMINW0EE0\\SQLEXPRESS01', Database='TRN', Trusted_Connection='yes', UID='testuser', PWD='password12345'
 
 *** Test Cases ***
 Test 1. Jobs: Verify a table exists or not
